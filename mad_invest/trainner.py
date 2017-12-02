@@ -77,7 +77,7 @@ def train(data, labels, word_index):
     y_val = labels[-nb_validation_samples:]
 
     embeddings_index = {}
-    f = open(os.path.join("data", 'glove.twitter.27B.50d.txt'))
+    f = open(os.path.join("data", 'glove.twitter.27B.100d.txt'))
     for line in f:
         values = line.split()
         word = values[0]
