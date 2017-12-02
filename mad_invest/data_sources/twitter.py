@@ -34,11 +34,7 @@ class MyStreamListener(tweepy.StreamListener):
     def on_error(self, status):
         l.error("Stream error: %s", status)
 
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG,
-                        format="%(asctime)s [ %(threadName)s ] [ %(levelname)s ] : %(message)s'")
-
+def main():
     # This handles Twitter authentication and the connection to Twitter Streaming API
     listener = MyStreamListener()
     auth.set_access_token(access_token, access_token_secret)
@@ -48,3 +44,9 @@ if __name__ == '__main__':
     to_track = ['bitcoin']
     l.info("Begin recording stream with keyword: %s", to_track)
     data = stream.filter(track=to_track)
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(asctime)s [ %(threadName)s ] [ %(levelname)s ] : %(message)s'")
+
+
