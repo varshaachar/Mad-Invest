@@ -21,7 +21,7 @@ api = tweepy.API(auth)
 
 class MyStreamListener(tweepy.StreamListener):
     def on_data(self, data):
-        pass
+        print(data)
 
     def on_error(self, status):
         print(status)
