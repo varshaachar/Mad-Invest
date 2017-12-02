@@ -29,8 +29,12 @@ def analyzeSentiment(text):
         'encodingType': 'utf8'
     }
     r = requests.post(url=url, json=data)
-    read = r.json()
-    return read
+    if r.status_code == 200:
+        read = r.json()
+        return read
+    elif r.status_code == 429:
+        time.sleep(1)
+        return None
 
 
 def get_sentimental():
@@ -44,11 +48,12 @@ def get_sentimental():
 
         for tweet in to_analyse:
             r = analyzeSentiment(tweet["text"])
-            l.debug("Sentiment for %s is %s", tweet["text"], r)
-            score = r["documentSentiment"]["score"]
-            magnitude = r["documentSentiment"]["magnitude"]
-            db["tweets"].update_one({"_id": tweet["_id"]}, {
-                "$set": {"score": score, "magnitude": magnitude}}, upsert=True)
+            if r:
+                l.debug("Sentiment for %s is %s", tweet["text"], r)
+                score = r["documentSentiment"]["score"]
+                magnitude = r["documentSentiment"]["magnitude"]
+                db["tweets"].update_one({"_id": tweet["_id"]}, {
+                    "$set": {"score": score, "magnitude": magnitude}}, upsert=True)
 
 
 if __name__ == '__main__':
