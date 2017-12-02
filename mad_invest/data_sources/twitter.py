@@ -25,7 +25,7 @@ class MyStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         d = json.loads(data)
         # l.debug("T: %s", data)
-        l.debug("[@%s]: %s", d["user"]["screen_name"], d["text"])
+        l.debug("\n[@%s]: %s", d["user"]["screen_name"], d["text"])
         try:
             d["_id"] = d["id"]
         except:
