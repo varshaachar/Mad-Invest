@@ -18,5 +18,15 @@ def analyzeSentiment(text):
     r = requests.post(url=url, json=data)
     read = r.json()
     #[score,magnitude]
-    return [read["documentSentiment"]["score"], read["documentSentiment"]["magnitude"]]
+    # return [read["documentSentiment"]["score"], read["documentSentiment"]["magnitude"]]
+    return read
 
+
+if __name__ == '__main__':
+    from mad_invest.config import db
+
+    for tweet in db["tweets"].find({"lang": "en"}).limit(100):
+        sen = analyzeSentiment(tweet["text"])
+        sen["_id"] = tweet["_id"]
+        db["sentiments"].insert_one(sen)
+        print(sen)
