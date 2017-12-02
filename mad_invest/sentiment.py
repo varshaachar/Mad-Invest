@@ -43,7 +43,7 @@ def get_sentimental():
     """
 
     while True:
-        time.sleep(2)
+        time.sleep(5)
         to_analyse = db["tweets"].find({"lang": "en", "score": {"$exists": False}}).limit(100)
 
         for tweet in to_analyse:
