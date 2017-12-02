@@ -42,7 +42,7 @@ def main():
     stream = Stream(auth, listener)
 
     # This line filter Twitter Streams to capture data by the keyword 'bitcoin'
-    to_track = ['bitcoin']
+    to_track = ["bitcoin", "btc", "cypto", "currency", "eth", "etherium", "coin", "mining"]
     l.info("Begin recording stream with keyword: %s", to_track)
     data = stream.filter(track=to_track)
 
