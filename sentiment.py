@@ -13,7 +13,7 @@ def analyzeSentiment(text):
     }
     data = {
         'document': document,
-        'encodingType': 'UTF32'
+        'encodingType': 'utf8'
     }
     r = requests.post(url=url, json=data)
     read = r.json()
