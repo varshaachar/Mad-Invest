@@ -37,6 +37,9 @@ class MyStreamListener(tweepy.StreamListener):
         except pymongo.errors.DuplicateKeyError as e:
             l.error("Duplicate id: %s", e.args)
             pass
+        except Exception as e:
+            l.error("Some error", e.args)
+            pass
 
     def on_error(self, status):
         l.error("Stream error: %s", status)
