@@ -1,6 +1,8 @@
 import json
 import logging
 
+import pymongo
+
 import mad_invest.config as config
 import tweepy
 from tweepy import Stream
@@ -30,7 +32,11 @@ class MyStreamListener(tweepy.StreamListener):
             d["_id"] = d["id"]
         except:
             l.error("Tweet doesn't have id? %s", data)
-        db["tweets"].insert_one(d)
+        try:
+            db["tweets"].insert_one(d)
+        except pymongo.errors.DuplicateKeyError as e:
+            l.error("Duplicate id: %s", e.args)
+            pass
 
     def on_error(self, status):
         l.error("Stream error: %s", status)
