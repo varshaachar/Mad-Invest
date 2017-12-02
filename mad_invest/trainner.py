@@ -125,7 +125,7 @@ def train(data, labels, word_index):
     return model
 
 
-if __name__ == '__main__':
+def main():
     labels = [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0,
               0, 0, 1,
               1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0,
@@ -165,13 +165,12 @@ if __name__ == '__main__':
               0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1,
               1, 1, 1,
               0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1]
-
     texts = prepare_text('./data/comments_17_10.csv')
-
     data, word_index = tokenise(texts)
-
     labels = prepare_label(labels)
-
     m = train(data, labels, word_index)
-
     m.save("octmodel.h5")
+
+
+if __name__ == '__main__':
+    main()
