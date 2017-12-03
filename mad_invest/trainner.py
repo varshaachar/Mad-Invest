@@ -50,7 +50,7 @@ def prepare_texts(paths):
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
         df = pd.concat([df, ndf])
-    return prepare_text("", df=df)
+    return prepare_text(None, df=df)
 
 
 def prepare_text(path, df=None):
@@ -60,7 +60,7 @@ def prepare_text(path, df=None):
     :param path:
     :return:
     """
-    if not df:
+    if path:
         df = pd.read_csv(path)
     else:
         df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
