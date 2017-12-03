@@ -13,6 +13,8 @@ from keras.layers import Conv1D, MaxPooling1D, Embedding
 from keras.models import Model
 import os
 
+from mad_invest.deli import write_pickle
+
 MAX_NB_WORDS = None
 MAX_SEQUENCE_LENGTH = 100000
 EMBEDDING_DIM = 50
