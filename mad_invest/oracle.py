@@ -30,8 +30,10 @@ def average_sentiment(lookback):
 
         score = t["score"]
         mag = t["magnitude"]
-
-        r.append(score * mag * (-1 if score < 0.5 else 1))
+        if score == 0:
+            r.append(mag)
+        else:
+            r.append(mag / score)
 
     if len(r) == 0: return 0
     return sum(r) / len(r)
