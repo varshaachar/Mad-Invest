@@ -44,16 +44,17 @@ def string_process(x):
     return " ".join([str(xs) for xs in x])
 
 
-def prepare_texts(paths):
+def prepare_texts(paths, labels):
     df = pd.DataFrame()
     for p in paths:
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
         df = pd.concat([df, ndf])
-    return prepare_text(None, df=df)
+
+    return prepare_text(None, df=df, labels=labels)
 
 
-def prepare_text(path, df=None):
+def prepare_text(path, df=None, labels=None):
     """
     Load the csv of comments and prepare the text to be fed into the model
 
@@ -68,6 +69,9 @@ def prepare_text(path, df=None):
     r = pd.DataFrame()
     r["body"] = df.groupby("dt")["body"].apply(string_process)
 
+    # rr = pd.concat([r, labels], axis=1)
+    # rr = rr.dropna(axis=0, how="any")
+    # return rr["body"], rr["target"]
     return r["body"]
 
 
@@ -160,18 +164,19 @@ def get_labels(start_month=8):
 
     reg["target"] = reg["dp"].map(lambda x: 0 if x <= 0 else 1)
 
-    return list(reg["target"])
+    return reg["target"]
 
 
 def main():
-    labels = get_labels(start_month=8)
-    texts = prepare_texts([
-        './data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'
-    ])
+    labels = get_labels(start_month=10)
+    # texts, labels = prepare_texts([
+    #     './data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'
+    # ], labels=labels)
+    texts = prepare_text('./data/comments_17_10.csv')
     data, word_index = tokenise(texts)
-    labels = prepare_label(labels)
+    labels = prepare_label(list(labels))
     m = train(data, labels, word_index)
-    m.save("octmodel.h5")
+    m.save("oct_newmodel.h5")
 
 
 if __name__ == '__main__':
