@@ -16,6 +16,7 @@ Mad-Invest
 Usage:
   run.py twitter
   run.py sentiment
+  run.py sarah
   
 twitter: run twitter daemon
 sentiment: run sentiment analysis daemon
