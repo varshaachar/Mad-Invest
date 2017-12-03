@@ -1,6 +1,4 @@
-from mad_invest.api import app, init
+from mad_invest.api import app
 
 if __name__ == '__main__':
-    init()
-
-    app.run(debug=True)
+    app.run(port=27019)
