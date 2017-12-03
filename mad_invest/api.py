@@ -42,6 +42,8 @@ def invest():
 
 @app.route('/tweets')
 def get_tweets():
+    l.debug("Args: %s", request.args)
+
     ts = int(request.args.get("ts") or datetime.now().timestamp() * 1000)
 
     tweets = db["tweets"].find({"lang": "en",
