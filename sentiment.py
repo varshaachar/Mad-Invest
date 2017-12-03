@@ -18,8 +18,8 @@ def analyzeSentiment(text):
     r = requests.post(url=url, json=data)
     read = r.json()
     #[score,magnitude]
-    # return [read["documentSentiment"]["score"], read["documentSentiment"]["magnitude"]]
-    return read
+    return [read["documentSentiment"]["score"], read["documentSentiment"]["magnitude"]]
+    # return read
 
 
 if __name__ == '__main__':
