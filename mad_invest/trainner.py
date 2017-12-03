@@ -19,7 +19,6 @@ EMBEDDING_DIM = 100
 
 l = logging.getLogger(__name__)
 
-
 def tokenise(texts):
     """
     Tokenise the text and convert it to nicely formatted matrices
@@ -51,7 +50,6 @@ def prepare_texts(paths):
         ndf = pd.read_csv(p)
         df = pd.concat(df, ndf)
     return prepare_text(df)
-
 
 def prepare_text(path):
     """
