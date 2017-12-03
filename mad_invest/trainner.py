@@ -22,15 +22,17 @@ EMBEDDING_DIM = 50
 l = logging.getLogger(__name__)
 
 
-def tokenise(texts):
+def tokenise(texts, tokenizer=None):
     """
     Tokenise the text and convert it to nicely formatted matrices
 
     :param texts:
     :return:
     """
-    tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
-    tokenizer.fit_on_texts(texts)
+    if not tokenizer:
+        tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
+        tokenizer.fit_on_texts(texts)
+
     sequences = tokenizer.texts_to_sequences(texts)
 
     word_index = tokenizer.word_index
@@ -38,7 +40,7 @@ def tokenise(texts):
 
     data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
 
-    return data, word_index
+    return data, word_index, tokenizer
 
 
 def string_process(x):
@@ -168,7 +170,7 @@ def main():
     labels = get_labels(start_month=8)
     texts, labels = prepare_texts(
         ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
-    data, word_index = tokenise(texts)
+    data, word_index, tknz = tokenise(texts)
     labels = prepare_label(labels)
     m = train(data, labels, word_index)
     m.save("three_model.h5")
