@@ -16,11 +16,11 @@ function handleMessage(sender_psid, received_message) {
             response = {"text": "No longer Mining? I hope you have a wonderful day with government controlled currency"};
         } else if (received_message.text === "invest") {
             request({
-                "uri": "http://35.196.69.223:27019/invest"
+                "uri": "http://35.190.144.249:27019/invest"
             }, (err, res, body) => {
                 if (!err) {
                     console.log('message sent!');
-                    let r = res.json();
+                    let r = JSON.parse(body);
 
                     if (r["invest"] === "yes") {
                         response = {"text": "You should invest!"}

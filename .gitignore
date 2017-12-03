@@ -105,3 +105,4 @@ ENV/
 
 # bootstrap
 bootstrap.css
+*/node_modules
