@@ -25,8 +25,7 @@ sentiment: run sentiment analysis daemon
 
 
 def sarah():
-
-    inv = average_sentiment(lookback=600)
+    inv = average_sentiment(lookback=6000)
 
     l.debug(inv)
 

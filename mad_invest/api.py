@@ -33,7 +33,7 @@ def predict_on():
 
 @app.route('/invest')
 def invest():
-    avg_sen = average_sentiment(lookback=600)
+    avg_sen = average_sentiment(lookback=6000)
     if avg_sen <= 0:
         return jsonify({"avg_sen": avg_sen, "invest": "no"})
     else:
