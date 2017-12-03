@@ -13,22 +13,26 @@ from keras.layers import Conv1D, MaxPooling1D, Embedding
 from keras.models import Model
 import os
 
+from mad_invest.deli import write_pickle
+
 MAX_NB_WORDS = None
 MAX_SEQUENCE_LENGTH = 100000
-EMBEDDING_DIM = 100
+EMBEDDING_DIM = 50
 
 l = logging.getLogger(__name__)
 
 
-def tokenise(texts):
+def tokenise(texts, tokenizer=None):
     """
     Tokenise the text and convert it to nicely formatted matrices
 
     :param texts:
     :return:
     """
-    tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
-    tokenizer.fit_on_texts(texts)
+    if not tokenizer:
+        tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
+        tokenizer.fit_on_texts(texts)
+
     sequences = tokenizer.texts_to_sequences(texts)
 
     word_index = tokenizer.word_index
@@ -36,7 +40,7 @@ def tokenise(texts):
 
     data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
 
-    return data, word_index
+    return data, word_index, tokenizer
 
 
 def string_process(x):
@@ -114,7 +118,7 @@ def train(data, labels, word_index):
     y_val = labels[-nb_validation_samples:]
 
     embeddings_index = {}
-    f = open(os.path.join("data", 'glove.twitter.27B.100d.txt'))
+    f = open(os.path.join("data", 'glove.twitter.27B.50d.txt'))
     for line in f:
         values = line.split()
         word = values[0]
@@ -166,7 +170,7 @@ def main():
     labels = get_labels(start_month=8)
     texts, labels = prepare_texts(
         ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
-    data, word_index = tokenise(texts)
+    data, word_index, tknz = tokenise(texts)
     labels = prepare_label(labels)
     m = train(data, labels, word_index)
     m.save("three_model.h5")

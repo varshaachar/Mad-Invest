@@ -27,14 +27,15 @@ def returnScoreMagnitudeByHour(timestamp):
     score = []
     magnitude = []
     for document in cursor:
-        something = document['score']
-        print(something)
-        score.append(document["score"])
-        magnitude.append(document["magnitude"])
-    return {score,magnitude}
+        print(document)
+        # something = document['score']
+        # print(something)
+        # score.append(document["score"])
+        # magnitude.append(document["magnitude"])
+        # return {score,magnitude}
 
 
 
 if __name__ == '__main__':
-    #print(returnScoreMagnitudeByHour(datetime.now()-timedelta(hours=1)))
-    runUpdateScoreMangitude()
+    print(returnScoreMagnitudeByHour(datetime.now() - timedelta(hours=1)))
+    # runUpdateScoreMangitude()
