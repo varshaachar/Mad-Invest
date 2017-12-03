@@ -28,6 +28,8 @@ def sarah():
 
     inv = average_sentiment(lookback=600)
 
+    l.debug(inv)
+
     if inv > 0:
         l.debug("Good time %s", inv)
 
