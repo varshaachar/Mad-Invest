@@ -103,5 +103,5 @@ ENV/
 .idea
 /mad_invest/config.py
 
-# node modules in the chat bot
-/chatbot/node_modules/
+# bootstrap
+bootstrap.css
