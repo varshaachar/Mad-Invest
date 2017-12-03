@@ -19,6 +19,7 @@ EMBEDDING_DIM = 100
 
 l = logging.getLogger(__name__)
 
+
 def tokenise(texts):
     """
     Tokenise the text and convert it to nicely formatted matrices
@@ -43,7 +44,7 @@ def string_process(x):
     return " ".join([str(xs) for xs in x])
 
 
-def prepare_texts(paths):
+def prepare_texts(paths, labels):
     df = pd.DataFrame()
     for p in paths:
         l.info("Concatting %s", p)
@@ -51,20 +52,45 @@ def prepare_texts(paths):
         df = pd.concat(df, ndf)
     return prepare_text(df)
 
-def prepare_text(path):
+
+def prepare_text(df, labels):
     """
     Load the csv of comments and prepare the text to be fed into the model
 
     :param path:
     :return:
     """
-    df = pd.read_csv(path)
+
     df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
 
-    r = pd.DataFrame()
-    r["body"] = df.groupby("dt")["body"].apply(string_process)
+    data = pd.DataFrame(df.groupby("dt")["body"].apply(string_process))
 
-    return r["body"]
+    r = pd.concat([labels, data], axis=1).dropna(how="any", axis=0)
+
+    return r["body"], r["target"]
+
+
+def get_labels(start_month=8):
+    df3 = pd.read_csv("./data/hourlybtc.csv")
+
+    df3["dt"] = pd.to_datetime(df3["ts"], unit="s")
+
+    monthly = df3[
+        (df3["dt"] >= datetime(2017, start_month, 1, 0, 0, 0)) & (df3["dt"] <= datetime(2017, 11, 1, 0, 0, 0))]
+
+    reg = pd.DataFrame()
+
+    reg["dt"] = monthly["dt"].dt.round("1h")
+    reg["p"] = monthly["price"]
+
+    reg["dp"] = reg["p"].diff()
+
+    reg["dp"] = reg["dp"].shift(-1)
+
+    reg["target"] = reg["dp"].map(lambda x: 0 if x <= 0 else 1)
+
+    reg = reg.set_index("dt")
+    return reg
 
 
 def prepare_label(labels):
@@ -136,36 +162,14 @@ def train(data, labels, word_index):
     return model
 
 
-def get_labels(start_month=8):
-    df3 = pd.read_csv("./data/hourlybtc.csv")
-
-    df3["dt"] = pd.to_datetime(df3["ts"], unit="s")
-
-    df3 = df3.set_index("dt")
-
-    monthly = df3[
-        (df3.index >= datetime(2017, start_month, 1, 0, 0, 0)) & (df3.index <= datetime(2017, 11, 1, 0, 0, 0))]
-
-    reg = pd.DataFrame()
-
-    reg["p"] = monthly["price"]
-
-    reg["dp"] = reg["p"].diff()
-
-    reg["dp"] = reg["dp"].shift(-1)
-
-    reg["target"] = reg["dp"].map(lambda x: 0 if x <= 0 else 1)
-
-    return list(reg["target"])
-
-
 def main():
-    labels = get_labels(start_month=10)
-    texts = prepare_text('./data/comments_17_10.csv')
+    labels = get_labels(start_month=8)
+    texts, labels = prepare_texts(
+        ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
     data, word_index = tokenise(texts)
     labels = prepare_label(labels)
     m = train(data, labels, word_index)
-    m.save("octmodel.h5")
+    m.save("three_model.h5")
 
 
 if __name__ == '__main__':
