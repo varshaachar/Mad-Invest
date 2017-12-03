@@ -15,7 +15,7 @@ import os
 
 MAX_NB_WORDS = None
 MAX_SEQUENCE_LENGTH = 100000
-EMBEDDING_DIM = 100
+EMBEDDING_DIM = 50
 
 l = logging.getLogger(__name__)
 
@@ -114,7 +114,7 @@ def train(data, labels, word_index):
     y_val = labels[-nb_validation_samples:]
 
     embeddings_index = {}
-    f = open(os.path.join("data", 'glove.twitter.27B.100d.txt'))
+    f = open(os.path.join("data", 'glove.twitter.27B.50d.txt'))
     for line in f:
         values = line.split()
         word = values[0]
@@ -147,11 +147,11 @@ def train(data, labels, word_index):
     x = Conv1D(128, 5, activation='relu')(x)
     x = GlobalMaxPooling1D()(x)
     x = Dense(128, activation='relu')(x)
-    preds = Dense(2, activation='softmax')(x)
+    preds = Dense(1, activation='sigmoid')(x)
 
     model = Model(sequence_input, preds)
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='rmsprop',
+    model.compile(loss='binary_crossentropy',
+                  optimizer='adam',
                   metrics=['acc'])
 
     model.fit(x_train, y_train,
@@ -167,8 +167,8 @@ def main():
     texts, labels = prepare_texts(
         ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
     data, word_index = tokenise(texts)
-    labels = prepare_label(labels)
-    m = train(data, labels, word_index)
+    # labels = prepare_label(labels)
+    m = train(data, list(labels), word_index)
     m.save("three_model.h5")
 
 
