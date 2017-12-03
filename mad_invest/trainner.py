@@ -147,11 +147,11 @@ def train(data, labels, word_index):
     x = Conv1D(128, 5, activation='relu')(x)
     x = GlobalMaxPooling1D()(x)
     x = Dense(128, activation='relu')(x)
-    preds = Dense(2, activation='sigmoid')(x)
+    preds = Dense(2, activation='softmax')(x)
 
     model = Model(sequence_input, preds)
-    model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop',
                   metrics=['acc'])
 
     model.fit(x_train, y_train,
@@ -163,9 +163,9 @@ def train(data, labels, word_index):
 
 
 def main():
-    labels = get_labels(start_month=10)
+    labels = get_labels(start_month=8)
     texts, labels = prepare_texts(
-        ['./data/comments_17_10.csv'], labels=labels)
+        ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
     data, word_index = tokenise(texts)
     labels = prepare_label(labels)
     m = train(data, labels, word_index)
