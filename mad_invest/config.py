@@ -6,7 +6,7 @@ DO NOT commit
 
 from pymongo import MongoClient
 
-client = MongoClient(host="35.227.77.242", port=27019)
+client = MongoClient(host="10.142.0.2", port=27019)
 db = client["mad_invest"]
 
 # Twitter keys
