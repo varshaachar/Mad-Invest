@@ -28,7 +28,7 @@ def predict(text):
 def predict_on():
     text = request.args.get("text")
 
-    return jsonify({"predict": predict(text)})
+    return jsonify({"predict": predict(float(text))})
 
 
 @app.route('/invest')
