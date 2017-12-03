@@ -84,7 +84,7 @@ app.get('/webhook', (req, res) => {
     }
 });
 
-app.post('/sendTexts', (req, res) => {
+app.get('/sendTexts', (req, res) => {
     console.log('hi');
     //sending to everyone subscibed a text rn
     console.log(arr);
