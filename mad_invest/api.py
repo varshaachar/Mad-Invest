@@ -3,6 +3,8 @@ import logging
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from keras.models import load_model
+
+from mad_invest.deli import load_pickle
 from mad_invest.trainner import get_labels, prepare_texts, tokenise
 from mad_invest.oracle import average_sentiment
 
@@ -10,17 +12,8 @@ from mad_invest.oracle import average_sentiment
 app = Flask(__name__)
 l = logging.getLogger(__name__)
 
-tknz = None
-model = load_model("_octmodel.h5")
-
-
-def init():
-    l.debug("Initial tokeniser")
-
-    labels = get_labels(start_month=8)
-    texts, labels = prepare_texts(
-        ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
-    data, word_index, tknz = tokenise(texts)
+tknz = load_pickle("tknz.pickle")
+model = load_model("three_model.h5")
 
 
 def predict(text):
