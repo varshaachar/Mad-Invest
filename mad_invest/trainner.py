@@ -50,18 +50,20 @@ def prepare_texts(paths):
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
         df = pd.concat([df, ndf])
-    return prepare_text(df)
+    return prepare_text("", df=df)
 
 
-def prepare_text(path):
+def prepare_text(path, df=None):
     """
     Load the csv of comments and prepare the text to be fed into the model
 
     :param path:
     :return:
     """
-    df = pd.read_csv(path)
-    df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
+    if not df:
+        df = pd.read_csv(path)
+    else:
+        df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
 
     r = pd.DataFrame()
     r["body"] = df.groupby("dt")["body"].apply(string_process)
