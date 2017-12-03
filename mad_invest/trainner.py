@@ -50,7 +50,7 @@ def prepare_texts(paths, labels):
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
         df = pd.concat([df, ndf])
-    return prepare_text(df)
+    return prepare_text(df, labels)
 
 
 def prepare_text(df, labels):
