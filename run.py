@@ -35,7 +35,7 @@ def sarah():
 
         return r.text
 
-    time.sleep(2 * 60)
+    time.sleep(60)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
