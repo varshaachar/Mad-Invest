@@ -25,7 +25,6 @@ sentiment: run sentiment analysis daemon
 
 
 def sarah():
-    time.sleep(2 * 60)
 
     inv = average_sentiment(lookback=600)
 
@@ -35,6 +34,8 @@ def sarah():
         r = requests.get("https://mic-conf.com/sendTexts")
 
         return r.text
+
+    time.sleep(2 * 60)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
