@@ -24,8 +24,8 @@ def csvCreate():
         for x in cursor:
             i += 1
             logging.info('doing this tweet id: ' + str(i))
-            text = x['text']
             try:
+                text = x['text']
                 arr = analyzeSentiment(text)
                 writer.writerow({'_id': x['_id'], 'score': arr[0], 'magnitude': arr[1], 'date': x['timestamp_ms']})
             except:

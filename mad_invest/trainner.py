@@ -19,7 +19,6 @@ EMBEDDING_DIM = 100
 
 l = logging.getLogger(__name__)
 
-
 def tokenise(texts):
     """
     Tokenise the text and convert it to nicely formatted matrices
@@ -49,21 +48,18 @@ def prepare_texts(paths):
     for p in paths:
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
-        df = pd.concat([df, ndf])
-    return prepare_text(None, df=df)
+        df = pd.concat(df, ndf)
+    return prepare_text(df)
 
-
-def prepare_text(path, df=None):
+def prepare_text(path):
     """
     Load the csv of comments and prepare the text to be fed into the model
 
     :param path:
     :return:
     """
-    if path:
-        df = pd.read_csv(path)
-    else:
-        df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
+    df = pd.read_csv(path)
+    df["dt"] = pd.to_datetime(df["created_utc"], unit="s").dt.round("1h")
 
     r = pd.DataFrame()
     r["body"] = df.groupby("dt")["body"].apply(string_process)
@@ -164,10 +160,8 @@ def get_labels(start_month=8):
 
 
 def main():
-    labels = get_labels(start_month=8)
-    texts = prepare_texts([
-        './data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'
-    ])
+    labels = get_labels(start_month=10)
+    texts = prepare_text('./data/comments_17_10.csv')
     data, word_index = tokenise(texts)
     labels = prepare_label(labels)
     m = train(data, labels, word_index)
