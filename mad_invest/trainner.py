@@ -167,8 +167,8 @@ def main():
     texts, labels = prepare_texts(
         ['./data/comments_17_08.csv', './data/comments_17_09.csv', './data/comments_17_10.csv'], labels=labels)
     data, word_index = tokenise(texts)
-    # labels = prepare_label(labels)
-    m = train(data, list(labels), word_index)
+    labels = prepare_label(labels)
+    m = train(data, labels, word_index)
     m.save("three_model.h5")
 
 
