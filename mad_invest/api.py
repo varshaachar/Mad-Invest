@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from keras.models import load_model
 
+from mad_invest.config import db
 from mad_invest.deli import load_pickle
 from mad_invest.trainner import get_labels, prepare_texts, tokenise
 from mad_invest.oracle import average_sentiment
-
 
 app = Flask(__name__)
 l = logging.getLogger(__name__)
@@ -38,3 +38,14 @@ def invest():
         return jsonify({"avg_sen": avg_sen, "invest": "no"})
     else:
         return jsonify({"avg_sen": avg_sen, "invest": "yes"})
+
+
+@app.route('/tweets')
+def get_tweets():
+    ts = int(request.args.get("ts")) or datetime.now().timestamp() * 1000
+
+    tweets = db["tweets"].find({"lang": "en",
+                                'timestamp_ms': {"$gte": ts},
+                                "score": {"$exists": True}})
+
+    return jsonify(list(tweets))
