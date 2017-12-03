@@ -6,6 +6,9 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 
+var handlePostback = require('./app');
+var handleMessage = require('./app');
+
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
@@ -20,10 +23,25 @@ app.post('/webhook', (req, res) => {
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
-      // Gets the message. entry.messaging is an array, but
-      // will only ever contain one message, so we get index 0
-      let webhookEvent = entry.messaging[0];
-      console.log(webhookEvent);
+      // Gets the body of the webhook event
+      let webhook_event = entry.messaging[0];
+      console.log(webhook_event);
+
+      // Get the sender PSID
+      let sender_psid = webhook_event.sender.id;
+      console.log('Sender PSID: ' + sender_psid);
+
+        // Check if the event is a message or postback and
+      // pass the event to the appropriate handler function
+        console.log(webhook_event.message);
+      if (webhook_event.message) {
+        console.log('message');
+        handleMessage(sender_psid, webhook_event.message);
+      } else if (webhook_event.postback) {
+        console.log('postback');
+        handlePostback(sender_psid, webhook_event.postback);
+      }
+
     });
 
     // Returns a '200 OK' response to all requests
