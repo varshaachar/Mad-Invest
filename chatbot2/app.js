@@ -20,7 +20,7 @@ function handleMessage(sender_psid, received_message) {
             }, (err, res, body) => {
                 if (!err) {
                     console.log('message sent!');
-                    let r = res.json();
+                    let r = JSON.parse(body);
 
                     if (r["invest"] === "yes") {
                         response = {"text": "You should invest!"}
