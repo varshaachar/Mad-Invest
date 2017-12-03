@@ -7,7 +7,7 @@ from datetime import timedelta
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("averaging")
 
-client = MongoClient(host="35.227.77.242", port=27019)
+client = MongoClient(host="35.190.144.249", port=27019)
 db = client['mad_invest']
 
 collection = db["tweets"]
