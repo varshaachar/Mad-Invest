@@ -49,7 +49,7 @@ def prepare_texts(paths):
     for p in paths:
         l.info("Concatting %s", p)
         ndf = pd.read_csv(p)
-        df = pd.concat(df, ndf)
+        df = pd.concat([df, ndf])
     return prepare_text(df)
 
 
